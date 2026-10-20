@@ -2,7 +2,6 @@
 name = "docmind"
 version = "1.0.0"
 description = "Chat with your PDFs: hybrid-search RAG with streamed, cited answers."
-readme = "../README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.156",

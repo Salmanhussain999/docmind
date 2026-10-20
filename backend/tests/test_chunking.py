@@ -13,6 +13,16 @@ def test_clean_text_rejoins_wrapped_lines_and_hyphenation():
     )
 
 
+def test_headings_stay_separate_from_the_text_below():
+    raw = "Leave policy\nFull-time employees receive 24 days of leave.\nThe year starts in\nJanuary."
+    cleaned = clean_text(raw)
+    assert (
+        cleaned == "Leave policy\n\nFull-time employees receive 24 days of leave. The year starts in January."
+    )
+    chunk = chunk_pages([Page(1, cleaned)])[0]
+    assert chunk.text.startswith("Leave policy\nFull-time employees")
+
+
 def test_split_units_breaks_overlong_sentences_at_spaces():
     units = split_units("word " * 100, max_len=50)
     assert all(len(u) <= 50 for u in units)

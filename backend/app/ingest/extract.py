@@ -25,12 +25,53 @@ SUPPORTED_TYPES = {
 }
 
 
+# A wrapped line can be short too, but it usually ends mid-phrase on one of these words.
+_CONTINUATION_WORDS = set(
+    [
+        "a",
+        "an",
+        "and",
+        "are",
+        "as",
+        "at",
+        "be",
+        "by",
+        "for",
+        "from",
+        "in",
+        "into",
+        "is",
+        "it",
+        "of",
+        "on",
+        "or",
+        "than",
+        "that",
+        "the",
+        "their",
+        "to",
+        "was",
+        "were",
+        "with",
+    ]
+)
+
+
+def _heading_break(match: re.Match[str]) -> str:
+    line = match.group(1)
+    last_word = line.rsplit(" ", 1)[-1].lower()
+    return f"{line}\n" if last_word in _CONTINUATION_WORDS else f"{line}\n\n"
+
+
 def clean_text(raw: str) -> str:
     """Undo the line-wrapping PDFs bake into extracted text, keeping paragraph breaks."""
     text = raw.replace("\r\n", "\n").replace("\r", "\n").replace(" ", " ")
     text = re.sub(r"(\w)-\n(\w)", r"\1\2", text)  # re-join words hyphenated across lines
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{2,}", "\n\n", text)  # paragraph break
+    # A short line with no closing punctuation, followed by a capitalised line, is a heading:
+    # keep it as its own paragraph instead of gluing it onto the first sentence below it.
+    text = re.sub(r"(?m)^([^\n]{1,60}[^\n.!?:;,])\n(?=[A-Z0-9])", _heading_break, text)
     text = re.sub(r"(?<!\n)\n(?!\n)", " ", text)  # single newline inside a paragraph
     return text.strip()
 

@@ -128,7 +128,7 @@ class ExtractiveGenerator:
         terms = {w for w in _WORD.findall(question.lower()) if w not in _STOPWORDS}
         scored: list[tuple[float, int, int, str]] = []
         for p_index, passage in enumerate(passages, start=1):
-            for s_index, sentence in enumerate(re.split(r"(?<=[.!?])\s+", passage.text)):
+            for s_index, sentence in enumerate(re.split(r"(?<=[.!?])\s+|\n", passage.text)):
                 words = set(_WORD.findall(sentence.lower()))
                 overlap = len(terms & words)
                 if overlap and 30 <= len(sentence) <= 600:

@@ -58,7 +58,7 @@ def _pack(units: list[str], size: int, overlap: int) -> list[str]:
     for unit in units:
         added = len(unit) + (1 if current else 0)
         if current and length + added > size:
-            packed.append(" ".join(current))
+            packed.append(_join(current))
             # Carry trailing sentences forward as overlap.
             carried: list[str] = []
             carried_len = 0
@@ -74,5 +74,13 @@ def _pack(units: list[str], size: int, overlap: int) -> list[str]:
         current.append(unit)
         length += added
     if current:
-        packed.append(" ".join(current))
+        packed.append(_join(current))
     return packed
+
+
+def _join(units: list[str]) -> str:
+    """Sentences join with a space; a heading (no closing punctuation) keeps its own line."""
+    text = units[0]
+    for previous, unit in zip(units, units[1:], strict=False):
+        text += ("\n" if not re.search(r"[.!?:;\"')\]]$", previous) else " ") + unit
+    return text
