@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, serif;
+
+  --color-paper: #ffffff;
+  --color-shelf: #f4f4f6;
+  --color-line: #e4e3ea;
+  --color-ink: #211d2b;
+  --color-ink-soft: #5a566a;
+  --color-ink-faint: #8d8a99;
+  --color-focus: #3b5bdb;
+
+  /* The one loud colour: a highlighter, used only for evidence. */
+  --color-marker: #ffe066;
+  --color-marker-edge: #e8c300;
+  --color-marker-wash: #fff7d1;
+
+  --color-danger: #b42318;
+  --color-ok: #2f7d4e;
+}
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 15px;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  mark {
+    background: none;
+    color: inherit;
+  }
+}
+
+/* A highlighter stroke: slightly uneven edges, like real marker on paper. */
+.highlight {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0.2em,
+    var(--color-marker) 0.35em,
+    var(--color-marker) calc(100% - 0.35em),
+    transparent calc(100% - 0.2em)
+  );
+  background-size: 100% 72%;
+  background-position: 0 70%;
+  background-repeat: no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0 0.25em;
+  margin: 0 -0.1em;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.streaming-caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--color-ink);
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes panel-in {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+.panel-in {
+  animation: panel-in 160ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Markdown inside answers */
+.answer p {
+  margin: 0 0 0.75em;
+}
+.answer p:last-child {
+  margin-bottom: 0;
+}
+.answer ul,
+.answer ol {
+  margin: 0 0 0.75em;
+  padding-left: 1.25em;
+}
+.answer ul {
+  list-style: disc;
+}
+.answer ol {
+  list-style: decimal;
+}
+.answer li {
+  margin: 0.25em 0;
+}
+.answer strong {
+  font-weight: 650;
+}
+.answer code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--color-shelf);
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
