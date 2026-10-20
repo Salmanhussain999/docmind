@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# App data (uploaded files and the SQLite database)
+backend/data/
+
+# Node
+node_modules/
+dist/
+
+.env
+.DS_Store

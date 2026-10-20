@@ -1,0 +1,37 @@
+[project]
+name = "docmind"
+version = "1.0.0"
+description = "Chat with your PDFs: hybrid-search RAG with streamed, cited answers."
+readme = "../README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.156",
+    "uvicorn[standard]>=0.54",
+    "pydantic-settings>=2.16",
+    "python-multipart>=0.0.32",
+    "pypdf>=6.21",
+    "numpy>=2.5",
+    "openai>=3.35",
+]
+
+[project.optional-dependencies]
+# Free, local embeddings (BAAI/bge-small-en-v1.5 via ONNX). Downloads ~130 MB on first use.
+local = ["fastembed>=0.9"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1",
+    "httpx>=0.28",
+    "ruff>=0.17",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]  # line length is the formatter's job
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
